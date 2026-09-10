@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Painel de vigilância epidemiológica para acompanhamento de dengue no Paraná.">
+    <title>Vigia Saúde | Dengue Paraná</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <a class="brand" href="#panorama" aria-label="Vigia Saúde, início">
+          <span class="brand-mark" aria-hidden="true">V</span>
+          <span><strong>Vigia</strong><small>Saúde</small></span>
+        </a>
+        <p class="sidebar-context">Vigilância epidemiológica<br><strong id="sidebar-context-value">Dengue · Paraná</strong></p>
+        <nav class="section-nav" aria-label="Seções do painel">
+          <a class="nav-link is-active" href="#panorama" data-section="panorama"><span aria-hidden="true">◌</span> Panorama</a>
+          <a class="nav-link" href="#qualidade" data-section="qualidade"><span aria-hidden="true">✓</span> Qualidade</a>
+          <a class="nav-link" href="#acoes" data-section="acoes"><span aria-hidden="true">↗</span> Ações</a>
+          <a class="nav-link" href="#metodologia" data-section="metodologia"><span aria-hidden="true">i</span> Metodologia</a>
+        </nav>
+        <div class="sidebar-foot">
+          <span class="data-dot" aria-hidden="true"></span>
+          <span id="sidebar-status">Aguardando dados</span>
+        </div>
+      </aside>
+
+      <main id="conteudo" class="main-content">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Vigilância em saúde</p>
+            <h1 id="page-title">Panorama de dengue</h1>
+            <p id="period-description" class="muted">Carregando período disponível…</p>
+          </div>
+          <div class="source-block">
+            <span class="source-label">Fonte</span>
+            <a id="source-link" href="#" rel="noopener noreferrer" target="_blank">Indisponível</a>
+            <span id="source-updated" class="muted small"></span>
+          </div>
+        </header>
+
+        <section class="filter-panel" aria-label="Filtros do painel">
+          <div class="filter-title"><strong>Recorte de análise</strong><span id="filter-feedback" class="muted small" aria-live="polite"></span></div>
+          <div class="filters">
+            <div class="field">
+              <label for="municipality-filter">Município</label>
+              <select id="municipality-filter" name="municipality"><option value="all">Todos os municípios</option></select>
+            </div>
+            <div class="field">
+              <label for="start-filter">Início</label>
+              <input id="start-filter" name="start" type="date">
+            </div>
+            <div class="field">
+              <label for="end-filter">Fim</label>
+              <input id="end-filter" name="end" type="date">
+            </div>
+            <button id="apply-filters" class="button button-primary" type="button">Atualizar análise</button>
+            <a id="brief-link" class="button button-secondary" href="/api/brief" download="boletim-vigia-saude.md">Baixar boletim</a>
+          </div>
+          <p class="filter-help muted small">Os períodos são alinhados a semanas epidemiológicas completas, de domingo a sábado.</p>
+        </section>
+
+        <div id="app-message" class="message" hidden role="status" aria-live="polite"></div>
+
+        <section id="panorama" class="content-section" aria-labelledby="page-title">
+          <div id="unavailable-state" class="state-card" hidden>
+            <h2>Dados ainda não disponíveis</h2>
+            <p>Importe uma base pela CLI para iniciar a análise. O painel não apresenta valores estimados quando a fonte não está disponível.</p>
+          </div>
+
+          <div id="dashboard-content">
+            <section class="metric-grid" aria-label="Indicadores principais">
+              <article class="metric-card"><p>Casos prováveis</p><strong id="metric-probable">—</strong><span id="metric-probable-note">No período selecionado</span></article>
+              <article class="metric-card"><p>Incidência</p><strong id="metric-incidence">—</strong><span id="metric-incidence-note">Por 100 mil habitantes</span></article>
+              <article class="metric-card"><p>Óbitos confirmados</p><strong id="metric-deaths">—</strong><span id="metric-deaths-note">Entre casos do período</span></article>
+              <article class="metric-card"><p>Variação em 4 semanas</p><strong id="metric-comparison">—</strong><span id="metric-comparison-note">Comparação indisponível</span></article>
+            </section>
+
+            <section id="signals-panel" class="signals-panel" aria-labelledby="signals-heading" hidden>
+              <div><p class="eyebrow">Variações a verificar</p><h2 id="signals-heading">Sinais descritivos</h2></div>
+              <p class="muted small">Estes sinais descrevem mudanças nos dados e não classificam risco automaticamente.</p>
+              <div id="signals-list" class="signals-list"></div>
+            </section>
+
+            <section class="panel chart-panel" aria-labelledby="series-heading">
+              <div class="panel-heading">
+                <div><p class="eyebrow">Evolução temporal</p><h2 id="series-heading">Casos prováveis por semana</h2></div>
+                <div class="legend" aria-label="Legenda do gráfico"><span><i class="legend-swatch cases"></i>Casos prováveis</span><span><i class="legend-swatch average"></i>Média móvel de 4 semanas</span></div>
+              </div>
+              <div id="chart-wrap" class="chart-wrap" aria-busy="true">
+                <svg id="series-chart" viewBox="0 0 760 270" role="img" aria-labelledby="series-heading chart-desc" preserveAspectRatio="none">
+                  <desc id="chart-desc">Aguardando dados da série temporal.</desc>
+                </svg>
+              </div>
+              <details class="data-details"><summary>Ver tabela acessível da série temporal</summary><div class="table-scroll"><table><caption class="sr-only">Série temporal de dengue</caption><thead><tr><th scope="col">Semana</th><th scope="col">Casos prováveis</th><th scope="col">Média móvel de 4 semanas</th><th scope="col">Óbitos</th><th scope="col">Situação</th></tr></thead><tbody id="series-table-body"></tbody></table></div></details>
+            </section>
+
+            <section class="panel municipality-panel" aria-labelledby="municipalities-heading">
+              <div class="panel-heading municipality-heading">
+                <div><p class="eyebrow">Situação territorial</p><h2 id="municipalities-heading">Municípios</h2><p id="municipalities-description" class="muted small">Ordene ou busque para comparar indicadores.</p></div>
+                <div class="search-field"><label class="sr-only" for="municipality-search">Buscar município</label><input id="municipality-search" type="search" placeholder="Buscar município"></div>
+              </div>
+              <div class="table-scroll municipality-table-scroll" tabindex="0" aria-label="Tabela rolável de indicadores por município"><table id="municipalities-table"><caption class="sr-only">Indicadores por município</caption><thead><tr><th scope="col"><button class="sort-button" data-sort="name" type="button">Município <span aria-hidden="true">↕</span></button></th><th scope="col"><button class="sort-button" data-sort="probable_cases" type="button">Casos prováveis <span aria-hidden="true">↕</span></button></th><th scope="col"><button class="sort-button" data-sort="incidence_per_100k" type="button">Incidência / 100 mil <span aria-hidden="true">↕</span></button></th><th scope="col"><button class="sort-button" data-sort="deaths" type="button">Óbitos <span aria-hidden="true">↕</span></button></th><th scope="col"><button class="sort-button" data-sort="comparison_pct" type="button">Variação 4 semanas <span aria-hidden="true">↕</span></button></th></tr></thead><tbody id="municipalities-table-body"></tbody></table></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="qualidade" class="content-section" aria-labelledby="quality-heading">
+          <div class="section-heading"><p class="eyebrow">Confiabilidade da leitura</p><h2 id="quality-heading">Qualidade dos dados</h2><p class="muted">Acompanhe as verificações antes de interpretar os indicadores.</p></div>
+          <div id="quality-summary" class="quality-summary"></div>
+          <div id="quality-checks" class="quality-list" aria-live="polite"></div>
+        </section>
+
+        <section id="acoes" class="content-section" aria-labelledby="actions-heading">
+          <div class="section-heading"><p class="eyebrow">Gestão da resposta</p><h2 id="actions-heading">Ações acompanhadas</h2><p class="muted">Registre a providência tomada a partir de um sinal. Não inclua dados pessoais.</p></div>
+          <div class="actions-layout">
+            <form id="action-form" class="panel action-form" novalidate>
+              <h3>Registrar ação</h3>
+              <div id="action-form-message" class="form-message" aria-live="polite"></div>
+              <div class="field"><label for="action-municipality">Município</label><select id="action-municipality" name="municipality_code" required><option value="">Selecione um município</option></select></div>
+              <div class="field"><label for="action-title">Ação</label><input id="action-title" name="title" maxlength="140" required placeholder="Ex.: Revisar notificações pendentes"></div>
+              <div class="action-form-row"><div class="field"><label for="action-owner">Responsável</label><input id="action-owner" name="owner" maxlength="100" required placeholder="Ex.: Vigilância municipal"></div><div class="field"><label for="action-due-date">Prazo</label><input id="action-due-date" name="due_date" type="date" required></div></div>
+              <div class="field"><label for="action-description">Descrição</label><textarea id="action-description" name="description" maxlength="1000" required rows="4" placeholder="Descreva a providência e o resultado esperado, sem dados pessoais."></textarea></div>
+              <button id="action-submit" class="button button-primary" type="submit">Registrar ação</button>
+            </form>
+            <div class="panel actions-list-panel"><div class="panel-heading"><div><h3>Ações registradas</h3><p id="actions-count" class="muted small"></p></div><button id="refresh-actions" class="button button-tertiary" type="button">Atualizar</button></div><div id="actions-list" class="actions-list" aria-live="polite"></div></div>
+          </div>
+        </section>
+
+        <section id="metodologia" class="content-section methodology" aria-labelledby="method-heading">
+          <div class="section-heading"><p class="eyebrow">Leitura responsável</p><h2 id="method-heading">Metodologia e limites</h2></div>
+          <div class="method-grid"><article><h3>Indicadores</h3><p>A série usa a data de início de sintomas, sem substituí-la pela data de notificação. Casos prováveis excluem registros descartados ou reclassificados como chikungunya.</p></article><article><h3>Óbitos e população</h3><p>Óbitos confirmados pelo agravo são contados entre casos com início de sintomas no período selecionado; não representam a data do óbito. A incidência usa a população de referência indicada pela fonte.</p></article><article><h3>Atualização e uso</h3><p>Os filtros são alinhados a semanas epidemiológicas iniciadas no domingo. Registros recentes podem ser revisados. Variações e sinais são descritivos e precisam de verificação local antes de qualquer decisão.</p></article></div>
+          <p id="method-notes" class="method-notes"></p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

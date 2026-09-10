@@ -1,0 +1,16 @@
+{
+  "title": "Vigia Saúde",
+  "territory": "Paraná",
+  "condition": "Dengue",
+  "uf": "41",
+  "year": 2026,
+  "population_year": 2025,
+  "source_name": "Ministério da Saúde · SINAN/Dengue",
+  "source_url": "https://dadosabertos.saude.gov.br/dataset/arboviroses-dengue",
+  "download_url": "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINAN/Dengue/csv/DENGBR26.csv.zip",
+  "catalog_updated_at": "2026-08-15",
+  "dictionary_url": "https://s3.sa-east-1.amazonaws.com/ckan.saude.gov.br/SINAN/Dengue/dic_dados_dengue.pdf",
+  "population_url": "https://apisidra.ibge.gov.br/values/t/6579/n6/all/v/9324/p/2025",
+  "population_reference": "IBGE/SIDRA · Tabela 6579 · estimativa municipal 2025 (aproximação para 2026)",
+  "provisional_weeks": 2
+}
