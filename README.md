@@ -4,6 +4,8 @@ Aplicação local para transformar dados públicos de dengue em indicadores veri
 
 **Estado: MVP local funcional, com dados oficiais e testes.** Requer validação pela vigilância antes de adoção institucional. Não é uma previsão epidemiológica, um protocolo de risco nem um sistema clínico.
 
+Código aberto sob a [licença MIT](LICENSE). O [repositório público](https://github.com/pedropaulofernandes88-stack/vigia-saude) disponibiliza código, documentação e testes para execução no próprio computador. O painel não está hospedado como serviço público; cada pessoa executa a aplicação localmente e adquire os dados diretamente das fontes oficiais.
+
 ## O que funciona
 
 - Aquisição do CSV nacional SINAN/Dengue e dos denominadores municipais do IBGE/SIDRA.
@@ -20,6 +22,8 @@ Aplicação local para transformar dados públicos de dengue em indicadores veri
 Requisitos: Python 3.12 e conexão com a internet para instalar dependências e adquirir fontes. A interface não usa CDN, fontes externas ou serviços de IA. Depois da carga, painel e ações funcionam localmente sem internet.
 
 ```sh
+git clone https://github.com/pedropaulofernandes88-stack/vigia-saude.git
+cd vigia-saude
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # Linux/macOS: source .venv/bin/activate
@@ -91,3 +95,9 @@ O servidor usa HTTP da biblioteca padrão do Python e aceita apenas `127.0.0.1`,
 A configuração permite outro estado e ano de dengue, desde que sejam fornecidos arquivos oficiais compatíveis e denominadores explícitos. Outros agravos precisam de adaptador e definições próprios. Esta versão ainda não inclui mapa geográfico, imunização, SRAG, previsão, conexão com prontuários ou notificações automáticas.
 
 A inspiração e a atribuição conceitual estão em [INSPIRATION.md](INSPIRATION.md). Esta implementação não incorpora código nem dados do painel histórico da 15ª Regional.
+
+## Licença e contribuições
+
+O código próprio e sua documentação são disponibilizados sob a [MIT License](LICENSE). O aviso de copyright e o texto da licença devem acompanhar cópias ou partes substanciais do software. Dados obtidos do SINAN, IBGE e outras fontes, assim como dependências de terceiros, seguem os termos e licenças dos respectivos titulares; a licença deste repositório não altera esses termos.
+
+Sugestões e correções podem ser propostas por issues e pull requests. Ao reportar um problema, informe o comportamento esperado, a versão e uma forma de reproduzi-lo com dados sintéticos. Não inclua registros individuais de saúde, credenciais ou arquivos locais de ações. Os testes Python usam somente fixtures sintéticas; Node.js é opcional para conferir a sintaxe da interface com `node --check web/app.js`.
