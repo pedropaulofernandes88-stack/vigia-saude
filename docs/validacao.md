@@ -37,6 +37,8 @@ Quinze testes automatizados da versão inicial passaram, cobrindo:
 
 Comandos: `python -m unittest discover -s tests -v`, `node --check web/app.js` e `git diff --check`.
 
+O mesmo conjunto de testes também passou no GitHub Actions em Ubuntu com Python 3.12. O workflow mantém permissões somente de leitura e fixa as ações oficiais por SHA.
+
 ## Navegador
 
 Verificado no navegador integrado do Codex:
